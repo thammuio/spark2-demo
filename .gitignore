@@ -27,4 +27,4 @@ project/play-fork-run.sbt
 project/sbt-ui.sbt
 .ensime
 .ensime_cache
-
+spark2-*.jar
