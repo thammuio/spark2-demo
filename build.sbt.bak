@@ -2,21 +2,21 @@ name          := "spark2-demo"
 organization  := "com.thammuio"
 description   := "Spark2 Demo"
 version       := "1.0.0"
-scalaVersion  := "2.12.13"
+scalaVersion  := "2.11.8"
 scalacOptions := Seq("-deprecation", "-unchecked", "-encoding", "utf8", "-Xlint")
-unmanagedSources / excludeFilter := (HiddenFileFilter || "*-script.scala")
-Compile / unmanagedResourceDirectories += baseDirectory.value / "conf"
-Test / unmanagedResourceDirectories += baseDirectory.value / "conf"
+excludeFilter in unmanagedSources := (HiddenFileFilter || "*-script.scala")
+unmanagedResourceDirectories in Compile += baseDirectory.value / "conf"
+unmanagedResourceDirectories in Test += baseDirectory.value / "conf"
 //This is important for some programs to read input from stdin
-run / connectInput := true
+connectInput in run := true
 // Works better to run the examples and tests in separate JVMs.
 fork := true
 // Must run Spark tests sequentially because they compete for port 4040!
-Test / parallelExecution := false
+parallelExecution in Test := false
 
-val sparkVersion        = "3.3.1"
-val scalaTestVersion    = "3.2.2"
-val scalaCheckVersion   = "1.15.2"
+val sparkVersion        = "2.3.0"
+val scalaTestVersion    = "3.0.5"
+val scalaCheckVersion   = "1.13.4"
 
 libraryDependencies ++= Seq(
   "org.apache.spark"  %% "spark-core"      % sparkVersion,
@@ -26,8 +26,7 @@ libraryDependencies ++= Seq(
   "org.apache.spark"  %% "spark-repl"      % sparkVersion,
 
   "org.scalatest"     %% "scalatest"       % scalaTestVersion  % "test",
-  "org.scalacheck"    %% "scalacheck"      % scalaCheckVersion % "test",
-  "com.github.vovapolu" %% "scalafix-collection" % "0.1.1")
+  "org.scalacheck"    %% "scalacheck"      % scalaCheckVersion % "test")
 
 
 initialCommands += """
@@ -61,8 +60,3 @@ addCommandAlias("ex8",  "runMain SparkSQL8")
 // Note the differences in the next two definitions:
 addCommandAlias("ex10directory",  "runMain SparkStreaming10Main")
 addCommandAlias("ex10socket",     "runMain SparkStreaming10Main --socket localhost:9900")
-
-ThisBuild / scalafixDependencies +=
-  "ch.epfl.scala" %% "scalafix-rules" % "0.10.4"
-
-ThisBuild / semanticdbEnabled := true
